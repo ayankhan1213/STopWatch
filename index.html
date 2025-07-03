@@ -2,95 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Stopwatch</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: #f0f0f0;
-    }
-    #display {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      background: #222;
-      color: #0f0;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-      font-variant-lining-nums: oldstyle;
-    }
-    .controls button {
-      font-size: 1.5rem;
-      margin: 0 0.5rem;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      background: #007bff;
-      color: #fff;
-      transition: background 0.2s ease;
-    }
-    .controls button:hover {
-      background: #0056b3;
-    }
-    .controls button:disabled {
-      background: #ccc;
-      cursor: default;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Countdown Timer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="display">00:00.00</div>
-  <div class="controls">
-    <button id="start">Start</button>
-    <button id="stop" disabled>Stop</button>
-    <button id="reset" disabled>Reset</button>
+  <div class="timer-container">
+    <h1>Countdown Timer</h1>
+    
+    <div class="input-section">
+      <input type="number" id="minutes" placeholder="Minutes" min="0">
+      <input type="number" id="seconds" placeholder="Seconds" min="0" max="59">
+    </div>
+
+    <div class="timer-display" id="timerDisplay">00:00</div>
+
+    <div class="button-group">
+      <button onclick="startTimer()">Start</button>
+      <button onclick="pauseTimer()">Pause</button>
+      <button onclick="resetTimer()">Reset</button>
+    </div>
   </div>
 
-  <script>
-    const display = document.getElementById('display');
-    const [btnStart, btnStop, btnReset] = ['start','stop','reset'].map(id => document.getElementById(id));
-
-    let startTime = 0;
-    let elapsed = 0;
-    let timerId;
-
-    function update() {
-      const diff = Date.now() - startTime + elapsed;
-      const minutes = Math.floor(diff / 60000);
-      const seconds = Math.floor(diff / 1000) % 60;
-      const centis = Math.floor(diff / 10) % 100;
-      display.textContent = 
-        `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}.${String(centis).padStart(2,'0')}`;
-    }
-
-    btnStart.addEventListener('click', () => {
-      startTime = Date.now();
-      timerId = setInterval(update, 10);
-      btnStart.disabled = true;
-      btnStop.disabled = false;
-      btnReset.disabled = false;
-    });
-
-    btnStop.addEventListener('click', () => {
-      clearInterval(timerId);
-      elapsed += Date.now() - startTime;
-      btnStart.disabled = false;
-      btnStop.disabled = true;
-    });
-
-    btnReset.addEventListener('click', () => {
-      clearInterval(timerId);
-      elapsed = 0;
-      display.textContent = '00:00.00';
-      btnReset.disabled = true;
-      btnStop.disabled = true;
-      btnStart.disabled = false;
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
